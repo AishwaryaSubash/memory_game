@@ -39,9 +39,20 @@ const Game = () => {
   }, [square]);
 
   const handleFlip = (index: number) => {
-    const updatedIsFlipped = [...isFlipped];
-    updatedIsFlipped[index] = !updatedIsFlipped[index];
-    setIsFlipped(updatedIsFlipped);
+    const flippedCount = isFlipped.filter((value) => value).length;
+    if (flippedCount >= 2) {
+      const updatedIsFlipped = Array.from(
+        { length: square * square },
+        () => false
+      );
+      setIsFlipped(updatedIsFlipped);
+      updatedIsFlipped[index] = !updatedIsFlipped[index];
+      setIsFlipped(updatedIsFlipped);
+    } else {
+      const updatedIsFlipped = [...isFlipped];
+      updatedIsFlipped[index] = !updatedIsFlipped[index];
+      setIsFlipped(updatedIsFlipped);
+    }
   };
 
   return (
