@@ -11,14 +11,20 @@ const Game = () => {
   );
 
   useEffect(() => {
-    console.log(isFlipped);
     const fetchData = async () => {
-      let arr = [];
-      for (let i = 0; i < (square * square) / 2; i++) {
+      const seeds = new Set<string>();
+      while (seeds.size !== (square * square) / 2) {
         const seed = generateRandomCombinations();
+        seeds.add(seed);
+      }
+      const uniqueSeeds: string[] = Array.from(seeds);
+      let arr: string[] = [];
+      //   console.log(seeds);
+      for (let i = 0; i < uniqueSeeds.length; i++) {
+        const seed = uniqueSeeds[i];
         try {
           const response = await fetch(
-            `https://api.dicebear.com/7.x/icons/svg?seed=${seed}`
+            `https://api.dicebear.com/7.x/icons/svg?flip=true&seed=${seed}`
           );
           const data = await response;
           arr.push(data.url);
@@ -26,7 +32,6 @@ const Game = () => {
           console.error(error);
         }
       }
-      //   console.log(arr);
       arr = arr.concat(arr);
       for (let i = arr.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
