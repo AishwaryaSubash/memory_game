@@ -3,12 +3,18 @@ import { useEffect, useState } from "react";
 // import { shapes, icons } from "@dicebear/collection";
 import Tile from "../components/Tile";
 
+// interface PairMap {
+//   key: string;
+//   value: number[];
+// }
+
 const Game = () => {
   const [square, setSquare] = useState(4);
   const [urls, setUrls] = useState<string[]>([]);
   const [isFlipped, setIsFlipped] = useState<boolean[]>(
     Array.from({ length: square * square }, () => false)
   );
+  const [pairMap, setPairMap] = useState<(string | number)[][]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,6 +44,32 @@ const Game = () => {
         [arr[i], arr[j]] = [arr[j], arr[i]];
       }
       setUrls(arr);
+      //   console.log(arr);
+      const pairs = [];
+      for (let i = 0; i < arr.length; i++) {
+        const temp = [];
+        temp.push(i);
+        temp.push(arr[i].slice(-3));
+        pairs.push(temp);
+      }
+      setPairMap(pairs);
+      console.log(pairMap);
+      //   const map = new Map();
+      //   for (let i = 0; i < arr.length - 1; i++) {
+      //     map.set(arr[i], []);
+      //   }
+      //   for (let i = 0; i < arr.length; i++) {
+      //     const val: number[] = map.get(arr[i]);
+      //     val.push(i);
+      //   }
+      //   const pairArray = Array.from(map, ([key, value]) => ({
+      //     key,
+      //     value,
+      //   }));
+
+      //   console.log(pairArray);
+      //   setPairMap(pairArray);
+      //   console.log(pairMap);
     };
 
     fetchData();
