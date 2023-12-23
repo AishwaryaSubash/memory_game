@@ -6,9 +6,12 @@ import Tile from "../components/Tile";
 const Game = () => {
   const [square, setSquare] = useState(4);
   const [urls, setUrls] = useState<string[]>([]);
+  const [isFlipped, setIsFlipped] = useState<boolean[]>(
+    Array.from({ length: square * square }, () => false)
+  );
 
-  
   useEffect(() => {
+    console.log(isFlipped);
     const fetchData = async () => {
       let arr = [];
       for (let i = 0; i < (square * square) / 2; i++) {
@@ -27,7 +30,6 @@ const Game = () => {
       arr = arr.concat(arr);
       for (let i = arr.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        // Swap elements at i and j
         [arr[i], arr[j]] = [arr[j], arr[i]];
       }
       setUrls(arr);
@@ -35,6 +37,12 @@ const Game = () => {
 
     fetchData();
   }, [square]);
+
+  const handleFlip = (index: number) => {
+    const updatedIsFlipped = [...isFlipped];
+    updatedIsFlipped[index] = !updatedIsFlipped[index];
+    setIsFlipped(updatedIsFlipped);
+  };
 
   return (
     <div
@@ -47,8 +55,8 @@ const Game = () => {
     >
       {Array.from({ length: square * square }, (_, index) => {
         return (
-          <div key={index}>
-            <Tile image={urls[index]} />
+          <div key={index} onClick={() => handleFlip(index)}>
+            <Tile image={urls[index]} isFlipped={isFlipped[index]} />
           </div>
         );
       })}
