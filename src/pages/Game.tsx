@@ -15,6 +15,7 @@ const Game = () => {
     Array.from({ length: square * square }, () => false)
   );
   const [pairMap, setPairMap] = useState<(string | number)[][]>([]);
+  const [points, setpoints] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -54,22 +55,6 @@ const Game = () => {
       }
       setPairMap(pairs);
       console.log(pairMap);
-      //   const map = new Map();
-      //   for (let i = 0; i < arr.length - 1; i++) {
-      //     map.set(arr[i], []);
-      //   }
-      //   for (let i = 0; i < arr.length; i++) {
-      //     const val: number[] = map.get(arr[i]);
-      //     val.push(i);
-      //   }
-      //   const pairArray = Array.from(map, ([key, value]) => ({
-      //     key,
-      //     value,
-      //   }));
-
-      //   console.log(pairArray);
-      //   setPairMap(pairArray);
-      //   console.log(pairMap);
     };
 
     fetchData();
@@ -77,6 +62,7 @@ const Game = () => {
 
   const handleFlip = (index: number) => {
     const flippedCount = isFlipped.filter((value) => value).length;
+
     if (flippedCount >= 2) {
       const updatedIsFlipped = Array.from(
         { length: square * square },
@@ -93,22 +79,25 @@ const Game = () => {
   };
 
   return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: `repeat(${square}, minmax(0, 1fr))`,
-      }}
-      className="gap-4 w-fit h-fit"
-      // className={`${"grid-cols-4"}`}
-    >
-      {Array.from({ length: square * square }, (_, index) => {
-        return (
-          <div key={index} onClick={() => handleFlip(index)}>
-            <Tile image={urls[index]} isFlipped={isFlipped[index]} />
-          </div>
-        );
-      })}
-    </div>
+    <>
+      <p>{points}</p>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: `repeat(${square}, minmax(0, 1fr))`,
+        }}
+        className="gap-4 w-fit h-fit"
+        // className={`${"grid-cols-4"}`}
+      >
+        {Array.from({ length: square * square }, (_, index) => {
+          return (
+            <div key={index} onClick={() => handleFlip(index)}>
+              <Tile image={urls[index]} isFlipped={isFlipped[index]} />
+            </div>
+          );
+        })}
+      </div>
+    </>
   );
 };
 
