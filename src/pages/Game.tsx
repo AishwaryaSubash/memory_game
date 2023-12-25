@@ -15,7 +15,7 @@ const Game = () => {
     Array.from({ length: square * square }, () => false)
   );
   const [pairMap, setPairMap] = useState<(string | number)[][]>([]);
-  const [points, setpoints] = useState(0);
+  const [points, setPoints] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -61,6 +61,10 @@ const Game = () => {
   }, [square]);
 
   const handleFlip = (index: number) => {
+    const updatedIsFlipped = [...isFlipped];
+    updatedIsFlipped[index] = !updatedIsFlipped[index];
+    setIsFlipped(updatedIsFlipped);
+
     const flippedCount = isFlipped.filter((value) => value).length;
 
     if (flippedCount >= 2) {
@@ -71,10 +75,22 @@ const Game = () => {
       setIsFlipped(updatedIsFlipped);
       updatedIsFlipped[index] = !updatedIsFlipped[index];
       setIsFlipped(updatedIsFlipped);
-    } else {
-      const updatedIsFlipped = [...isFlipped];
-      updatedIsFlipped[index] = !updatedIsFlipped[index];
-      setIsFlipped(updatedIsFlipped);
+    }
+
+    const flippedIndex = isFlipped
+      .map((value, index) => {
+        if (value) {
+          return index;
+        }
+      })
+      .filter((value) => value);
+    console.log(flippedIndex);
+    const code = flippedIndex.map((element) => {
+      const res = pairMap.find((item) => item[0] === element);
+      return res ? res[1] : undefined;
+    });
+    if (new Set(code).size === 1 && code.length !== 1) {
+      setPoints(points + 1);
     }
   };
 
