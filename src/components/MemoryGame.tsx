@@ -16,6 +16,8 @@ const Game = () => {
   );
   const [pairMap, setPairMap] = useState<(string | number)[][]>([]);
   const [points, setPoints] = useState(0);
+  const [choiceOne, setChoiceOne] = useState(-1);
+  const [choiceTwo, setChoiceTwo] = useState(-1);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -46,15 +48,27 @@ const Game = () => {
       }
       setUrls(arr);
       //   console.log(arr);
-      const pairs = [];
-      for (let i = 0; i < arr.length; i++) {
-        const temp = [];
-        temp.push(i);
-        temp.push(arr[i].slice(-3));
-        pairs.push(temp);
-      }
-      setPairMap(pairs);
-      console.log(pairMap);
+      const indicesMap = new Map();
+      arr.forEach((item, index) => {
+        const element = item.slice(-3);
+        if (!indicesMap.has(element)) {
+          indicesMap.set(element, [index]);
+        } else {
+          indicesMap.get(element).push(index);
+        }
+      });
+      console.log(indicesMap);
+      // const pairs = [];
+      // for (let i = 0; i < arr.length; i++) {
+      //   // console.log(arr);
+      //   // console.log(i);
+      //   const temp = [];
+      //   temp.push(i);
+      //   temp.push(arr[i].slice(-3));
+      //   pairs.push(temp);
+      // }
+      // setPairMap(pairs);
+      // console.log(pairMap);
     };
 
     fetchData();
@@ -76,23 +90,28 @@ const Game = () => {
       updatedIsFlipped[index] = !updatedIsFlipped[index];
       setIsFlipped(updatedIsFlipped);
     }
+    // console.log(index);
+    // console.log(isFlipped[index]);
 
-    const flippedIndex = isFlipped
-      .map((value, index) => {
-        console.log(index, value);
-        if (value) {
-          return index;
-        }
-      })
-      .filter((value) => value);
-    console.log(flippedIndex);
-    const code = flippedIndex.map((element) => {
-      const res = pairMap.find((item) => item[0] === element);
-      return res ? res[1] : undefined;
-    });
-    if (new Set(code).size === 1 && code.length !== 1) {
-      setPoints(points + 1);
-    }
+    choiceOne ? setChoiceOne(index) : setChoiceTwo(index);
+    console.log(choiceOne, choiceTwo);
+
+    // const flippedIndex = isFlipped
+    //   .map((value, index) => {
+    //     console.log(index, value);
+    //     if (value) {
+    //       return index;
+    //     }
+    //   })
+    //   .filter((value) => value);
+    // console.log(flippedIndex);
+    // const code = flippedIndex.map((element) => {
+    //   const res = pairMap.find((item) => item[0] === element);
+    //   return res ? res[1] : undefined;
+    // });
+    // if (new Set(code).size === 1 && code.length !== 1) {
+    //   setPoints(points + 1);
+    // }
   };
 
   return (
