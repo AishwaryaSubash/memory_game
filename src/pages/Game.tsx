@@ -1,22 +1,32 @@
-import { useEffect, useState } from "react";
-// import { createAvatar } from "@dicebear/core";
-// import { shapes, icons } from "@dicebear/collection";
+import { createContext, useEffect, useState } from "react";
 import Tile from "../components/Tile";
 
-// interface PairMap {
-//   key: string;
-//   value: number[];
-// }
+export const GameContext = createContext({
+  square: 4,
+});
 
-const Game = () => {
+export interface CardInterface {
+  id: number;
+  image: string;
+  matched: boolean;
+}
+
+const Game = ({
+  level,
+  handleLevel,
+}: {
+  level: number;
+  handleLevel: (level: number) => void;
+}) => {
   const [square, setSquare] = useState(4);
-  const [urls, setUrls] = useState<string[]>([]);
-  const [isFlipped, setIsFlipped] = useState<boolean[]>(
-    Array.from({ length: square * square }, () => false)
-  );
-  const [pairMap, setPairMap] = useState<(string | number)[][]>([]);
+  const [cards, setCards] = useState<CardInterface[]>([]);
   const [points, setPoints] = useState(0);
+  const [turns, setTurns] = useState(0);
+  const [choiceOne, setChoiceOne] = useState<CardInterface | null>(null);
+  const [choiceTwo, setChoiceTwo] = useState<CardInterface | null>(null);
+  const [noFlip, setNoFlip] = useState<boolean>();
 
+  // * Fetching card images
   useEffect(() => {
     const fetchData = async () => {
       const seeds = new Set<string>();
@@ -25,8 +35,7 @@ const Game = () => {
         seeds.add(seed);
       }
       const uniqueSeeds: string[] = Array.from(seeds);
-      let arr: string[] = [];
-      //   console.log(seeds);
+      let arr = [];
       for (let i = 0; i < uniqueSeeds.length; i++) {
         const seed = uniqueSeeds[i];
         try {
@@ -39,81 +48,107 @@ const Game = () => {
           console.error(error);
         }
       }
-      arr = arr.concat(arr);
-      for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
-      }
-      setUrls(arr);
-      //   console.log(arr);
-      const pairs = [];
-      for (let i = 0; i < arr.length; i++) {
-        const temp = [];
-        temp.push(i);
-        temp.push(arr[i].slice(-3));
-        pairs.push(temp);
-      }
-      setPairMap(pairs);
-      console.log(pairMap);
+
+      arr = arr
+        .concat(arr)
+        .sort(() => Math.random() - 0.5)
+        .map((card) => ({ image: card, id: Math.random(), matched: false }));
+      setCards(arr);
     };
+    setPoints(0);
+    setTurns(0);
+    setSquare(4 + 2 * (level - 1));
 
     fetchData();
-  }, [square]);
+  }, [square, level]);
 
-  const handleFlip = (index: number) => {
-    const updatedIsFlipped = [...isFlipped];
-    updatedIsFlipped[index] = !updatedIsFlipped[index];
-    setIsFlipped(updatedIsFlipped);
-
-    const flippedCount = isFlipped.filter((value) => value).length;
-
-    if (flippedCount >= 2) {
-      const updatedIsFlipped = Array.from(
-        { length: square * square },
-        () => false
-      );
-      // setIsFlipped(updatedIsFlipped);
-      updatedIsFlipped[index] = !updatedIsFlipped[index];
-      setIsFlipped(updatedIsFlipped);
+  // * Checking for card matches
+  useEffect(() => {
+    if (choiceOne && choiceTwo) {
+      setNoFlip(true);
+      if (
+        choiceOne?.id !== choiceTwo?.id &&
+        choiceOne?.image === choiceTwo?.image
+      ) {
+        setCards((prevCards) => {
+          prevCards.map((card) => {
+            if (card.id === choiceOne.id || card.id === choiceTwo.id) {
+              card.matched = true;
+            }
+          });
+          return prevCards;
+        });
+        setPoints(points + 1);
+        resetTurn();
+        console.log("match");
+      } else {
+        console.log("no match");
+        setTimeout(() => resetTurn(), 1000);
+      }
+      console.log(cards);
     }
+  }, [choiceOne, choiceTwo]);
 
-    const flippedIndex = isFlipped
-      .map((value, index) => {
-        console.log(index, value);
-        if (value) {
-          return index;
-        }
-      })
-      .filter((value) => value);
-    console.log(flippedIndex);
-    const code = flippedIndex.map((element) => {
-      const res = pairMap.find((item) => item[0] === element);
-      return res ? res[1] : undefined;
-    });
-    if (new Set(code).size === 1 && code.length !== 1) {
-      setPoints(points + 1);
+  useEffect(() => {
+    if (points === (square * square) / 2) {
+      handleLevel(level + 1);
+      // setSquare();
     }
+  }, [points]);
+
+  // * Handling card choices
+  const handleChoice = (card: CardInterface) => {
+    console.log(card);
+    choiceOne ? setChoiceTwo(card) : setChoiceOne(card);
+  };
+
+  // * Reset all cards
+  const resetTurn = () => {
+    setNoFlip(false);
+    setTurns(turns + 1);
+    setChoiceTwo(null);
+    setChoiceOne(null);
   };
 
   return (
     <>
-      <p>{points}</p>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: `repeat(${square}, minmax(0, 1fr))`,
-        }}
-        className="gap-4 w-fit h-fit"
-        // className={`${"grid-cols-4"}`}
-      >
-        {Array.from({ length: square * square }, (_, index) => {
-          return (
-            <div key={index} onClick={() => handleFlip(index)}>
-              <Tile image={urls[index]} isFlipped={isFlipped[index]} />
+      {cards.length && (
+        <>
+          <div className="flex gap-4 items-center justify-between mb-6">
+            <div className="flex gap-4 items-center justify-center mb-6">
+              <p className="text-2xl">Score:</p>
+              <p className="text-2xl">{points}</p>
             </div>
-          );
-        })}
-      </div>
+            <div className="flex gap-4 items-center justify-center mb-6">
+              <p className="text-2xl">Turns:</p>
+              <p className="text-2xl">{turns}</p>
+            </div>
+          </div>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: `repeat(${square}, minmax(0, 1fr))`,
+            }}
+            className="gap-4 w-fit h-fit"
+          >
+            {cards.map((card) => {
+              return (
+                <GameContext.Provider value={{ square }}>
+                  <Tile
+                    key={card.id}
+                    card={card}
+                    handleChoice={handleChoice}
+                    isFlipped={
+                      card === choiceOne || card === choiceTwo || card.matched
+                    }
+                    noFlip={noFlip}
+                  />
+                </GameContext.Provider>
+              );
+            })}
+          </div>
+        </>
+      )}
     </>
   );
 };
