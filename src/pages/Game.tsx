@@ -80,12 +80,11 @@ const Game = ({
         });
         setPoints(points + 1);
         resetTurn();
-        console.log("match");
+        // console.log("match");
       } else {
-        console.log("no match");
+        // console.log("no match");
         setTimeout(() => resetTurn(), 1000);
       }
-      console.log(cards);
     }
   }, [choiceOne, choiceTwo]);
 
@@ -98,7 +97,6 @@ const Game = ({
 
   // * Handling card choices
   const handleChoice = (card: CardInterface) => {
-    console.log(card);
     choiceOne ? setChoiceTwo(card) : setChoiceOne(card);
   };
 
