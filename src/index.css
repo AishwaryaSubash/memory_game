@@ -5,7 +5,7 @@
 @tailwind utilities;
 
 body {
-  /* background-color: #481F31; */
+  color: #481f31;
   background-color: #e4e5e0;
   font-family: "Diphylleia", serif;
 }

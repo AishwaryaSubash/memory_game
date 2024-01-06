@@ -1,16 +1,16 @@
 import { useState } from "react";
+import { motion } from "framer-motion";
 import "./App.css";
 import Game from "./pages/Game";
-import { motion } from "framer-motion";
 
 function App() {
   const [startGame, setStartGame] = useState(false);
   const [level, setLevel] = useState<number>(1);
 
   const handleLevel = (level: number) => {
-    setLevel((prevLevel) => {
-      if (prevLevel != 3) return prevLevel + 1;
-    });
+    setLevel((prevLevel) =>
+      prevLevel !== undefined && prevLevel != 3 ? prevLevel + 1 : 0
+    );
     console.log("new level", level);
   };
 
@@ -23,19 +23,14 @@ function App() {
         </div>
         <div className="pt-5">
           {startGame ? (
-            <>
-              <div className="flex gap-4 justify-center items-center text-4xl font-bold">
-                <p>Level</p>
-                <p>{level}</p>
-              </div>
-              <Game level={level} handleLevel={handleLevel} />
-            </>
+            <Game level={level} handleLevel={handleLevel} />
           ) : (
             <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               className="bg-slate-700 p-4 m-4 rounded-xl text-gray-300 relative text-4xl font-bold"
-              onClick={() => setTimeout(() => setStartGame(true), 900)}
+              // onClick={() => setTimeout(() => setStartGame(true), 3000)}
+              onClick={() => setStartGame(true)}
             >
               Start Game
             </motion.button>

@@ -58,8 +58,8 @@ const Game = ({
     setPoints(0);
     setTurns(0);
     setSquare(4 + 2 * (level - 1));
-
     fetchData();
+    // setTimeout(() => fetchData(), 1000000);
   }, [square, level]);
 
   // * Checking for card matches
@@ -112,8 +112,12 @@ const Game = ({
 
   return (
     <>
-      {cards.length && (
+      {cards.length != 0 ? (
         <>
+          <div className="flex gap-4 justify-center items-center text-4xl font-bold">
+            <p>Level</p>
+            <p>{level}</p>
+          </div>
           <div className="flex gap-4 items-center justify-between mb-6">
             <div className="flex gap-4 items-center justify-center mb-6">
               <p className="text-2xl">Score:</p>
@@ -148,6 +152,55 @@ const Game = ({
             })}
           </div>
         </>
+      ) : (
+        <div className="w-full h-full flex justify-center items-center self-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width={100}
+            height={100}
+            viewBox="0 0 24 24"
+          >
+            <g
+              fill="none"
+              stroke="#481f31"
+              stroke-linecap="round"
+              stroke-width="2"
+            >
+              <path
+                stroke-dasharray="60"
+                stroke-dashoffset="60"
+                stroke-opacity=".3"
+                d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"
+              >
+                <animate
+                  fill="freeze"
+                  attributeName="stroke-dashoffset"
+                  dur="1.3s"
+                  values="60;0"
+                />
+              </path>
+              <path
+                stroke-dasharray="15"
+                stroke-dashoffset="15"
+                d="M12 3C16.9706 3 21 7.02944 21 12"
+              >
+                <animate
+                  fill="freeze"
+                  attributeName="stroke-dashoffset"
+                  dur="0.3s"
+                  values="15;0"
+                />
+                <animateTransform
+                  attributeName="transform"
+                  dur="1.5s"
+                  repeatCount="indefinite"
+                  type="rotate"
+                  values="0 12 12;360 12 12"
+                />
+              </path>
+            </g>
+          </svg>
+        </div>
       )}
     </>
   );
