@@ -3,6 +3,7 @@ import Tile from "../components/Tile";
 
 export const GameContext = createContext({
   square: 4,
+  // setSquare: (square: number) => void,
 });
 
 export interface CardInterface {
@@ -57,7 +58,6 @@ const Game = ({
     };
     setPoints(0);
     setTurns(0);
-    setSquare(4 + 2 * (level - 1));
     fetchData();
     // setTimeout(() => fetchData(), 1000000);
   }, [square, level]);
@@ -91,6 +91,7 @@ const Game = ({
   useEffect(() => {
     if (points === (square * square) / 2) {
       handleLevel(level + 1);
+      setSquare(4 + 2 * (level - 1));
       // setSquare();
     }
   }, [points]);

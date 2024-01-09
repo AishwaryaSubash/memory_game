@@ -37,7 +37,7 @@ const Tile: React.FC<TileProps> = ({
         <img src={card.image} alt="icon" width={size} height={size} />
       ) : (
         <img
-          src="src/assets/pattern.jpg"
+          src="/pattern.jpg"
           alt="mystery"
           width={size}
           height={size}

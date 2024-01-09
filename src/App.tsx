@@ -7,10 +7,13 @@ function App() {
   const [startGame, setStartGame] = useState(false);
   const [level, setLevel] = useState<number>(1);
 
+  // const { setSquare } = useContext(GameContext);
+
   const handleLevel = (level: number) => {
     setLevel((prevLevel) =>
       prevLevel !== undefined && prevLevel != 3 ? prevLevel + 1 : 0
     );
+    // setSquare(4 + 2 * (level - 1));
     console.log("new level", level);
   };
 
@@ -29,8 +32,8 @@ function App() {
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               className="bg-slate-700 p-4 m-4 rounded-xl text-gray-300 relative text-4xl font-bold"
-              // onClick={() => setTimeout(() => setStartGame(true), 3000)}
-              onClick={() => setStartGame(true)}
+              onClick={() => setTimeout(() => setStartGame(true), 1000)}
+              // onClick={() => setStartGame(true)}
             >
               Start Game
             </motion.button>
