@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import Tile from "../components/Tile";
+import generateRandomCombinations from "../utils";
 
 export const GameContext = createContext({
   square: 4,
@@ -112,18 +113,18 @@ const Game = ({
     <>
       {cards.length != 0 ? (
         <>
-          <div className="flex gap-4 justify-center items-center text-4xl font-bold">
+          <div className="flex gap-4 justify-center items-center text-4xl font-bold max-sm:text-xl">
             <p>Level</p>
             <p>{level}</p>
           </div>
-          <div className="flex gap-4 items-center justify-between mb-6">
+          <div className="flex w-full gap-4 items-center justify-between mb-6 text-2xl max-sm:text-base">
             <div className="flex gap-4 items-center justify-center mb-6">
-              <p className="text-2xl">Score:</p>
-              <p className="text-2xl">{points}</p>
+              <p>Score:</p>
+              <p>{points}</p>
             </div>
             <div className="flex gap-4 items-center justify-center mb-6">
-              <p className="text-2xl">Turns:</p>
-              <p className="text-2xl">{turns}</p>
+              <p>Turns:</p>
+              <p>{turns}</p>
             </div>
           </div>
           <div
@@ -157,23 +158,5 @@ const Game = ({
     </>
   );
 };
-
-function getRandomInt(min: number, max: number) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-function generateRandomCombinations() {
-  const alphabets = "abcdefghijklmnopqrstuvwxyz1234567890";
-  const index1 = getRandomInt(0, alphabets.length - 1);
-  const index2 = getRandomInt(0, alphabets.length - 1);
-  const index3 = getRandomInt(0, alphabets.length - 1);
-  const randomCombinations = [
-    alphabets[index1],
-    alphabets[index2],
-    alphabets[index3],
-  ];
-  const result = randomCombinations.join("");
-  return result;
-}
 
 export default Game;
