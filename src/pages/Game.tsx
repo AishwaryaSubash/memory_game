@@ -3,7 +3,6 @@ import Tile from "../components/Tile";
 
 export const GameContext = createContext({
   square: 4,
-  // setSquare: (square: number) => void,
 });
 
 export interface CardInterface {
@@ -59,7 +58,6 @@ const Game = ({
     setPoints(0);
     setTurns(0);
     fetchData();
-    // setTimeout(() => fetchData(), 1000000);
   }, [square, level]);
 
   // * Checking for card matches
@@ -88,11 +86,12 @@ const Game = ({
     }
   }, [choiceOne, choiceTwo]);
 
+  // * For calculating points
   useEffect(() => {
     if (points === (square * square) / 2) {
+      setCards([]);
       handleLevel(level + 1);
-      setSquare(4 + 2 * (level - 1));
-      // setSquare();
+      setSquare(4 + 2 * level);
     }
   }, [points]);
 
@@ -136,9 +135,8 @@ const Game = ({
           >
             {cards.map((card) => {
               return (
-                <GameContext.Provider value={{ square }}>
+                <GameContext.Provider value={{ square }} key={card.id}>
                   <Tile
-                    key={card.id}
                     card={card}
                     handleChoice={handleChoice}
                     isFlipped={
@@ -162,30 +160,30 @@ const Game = ({
             <g
               fill="none"
               stroke="#481f31"
-              stroke-linecap="round"
-              stroke-width="2"
+              strokeLinecap="round"
+              strokeWidth={2}
             >
               <path
-                stroke-dasharray="60"
-                stroke-dashoffset="60"
-                stroke-opacity=".3"
+                strokeDasharray={60}
+                strokeDashoffset={60}
+                strokeOpacity={0.3}
                 d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"
               >
                 <animate
                   fill="freeze"
-                  attributeName="stroke-dashoffset"
+                  attributeName="strokeDashoffset"
                   dur="1.3s"
                   values="60;0"
                 />
               </path>
               <path
-                stroke-dasharray="15"
-                stroke-dashoffset="15"
+                strokeDasharray={15}
+                strokeDashoffset={15}
                 d="M12 3C16.9706 3 21 7.02944 21 12"
               >
                 <animate
                   fill="freeze"
-                  attributeName="stroke-dashoffset"
+                  attributeName="strokeDashoffset"
                   dur="0.3s"
                   values="15;0"
                 />

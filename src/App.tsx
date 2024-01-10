@@ -7,22 +7,21 @@ function App() {
   const [startGame, setStartGame] = useState(false);
   const [level, setLevel] = useState<number>(1);
 
-  // const { setSquare } = useContext(GameContext);
-
-  const handleLevel = (level: number) => {
-    setLevel((prevLevel) =>
-      prevLevel !== undefined && prevLevel != 3 ? prevLevel + 1 : 0
-    );
-    // setSquare(4 + 2 * (level - 1));
-    console.log("new level", level);
-  };
+  const handleLevel = () =>
+    // level:number
+    {
+      setLevel((prevLevel) =>
+        prevLevel !== undefined && prevLevel != 3 ? prevLevel + 1 : 1
+      );
+      // console.log("New Level", level);
+    };
 
   return (
     <>
       <div className="flex flex-col gap-7 items-center justify-center">
         <div className="flex gap-10 justify-center">
           <img src="/title-logo.svg" width={150} height={150} />
-          <p className="text-9xl font-bold">Synapse</p>
+          <p className="text-9xl font-bold">Unmatched</p>
         </div>
         <div className="pt-5">
           {startGame ? (
@@ -33,7 +32,6 @@ function App() {
               whileTap={{ scale: 0.9 }}
               className="bg-slate-700 p-4 m-4 rounded-xl text-gray-300 relative text-4xl font-bold"
               onClick={() => setTimeout(() => setStartGame(true), 1000)}
-              // onClick={() => setStartGame(true)}
             >
               Start Game
             </motion.button>
