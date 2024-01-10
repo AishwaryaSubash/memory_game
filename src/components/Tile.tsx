@@ -36,13 +36,7 @@ const Tile: React.FC<TileProps> = ({
       onClick={handleClick}
     >
       {isFlipped ? (
-        <img
-          src={card.image}
-          alt="icon"
-          // width={size}
-          // height={size}
-          // className={`max-lg:w-[(${size / 2}px] max-lg:h-[${size / 2}px]`}
-        />
+        <img src={card.image} alt="icon" />
       ) : (
         <img src="/pattern.jpg" alt="mystery" width={size} height={size} />
       )}

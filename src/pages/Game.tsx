@@ -79,9 +79,9 @@ const Game = ({
         });
         setPoints(points + 1);
         resetTurn();
-        // console.log("match");
+        // console.log("matched");
       } else {
-        // console.log("no match");
+        // console.log("unmatched");
         setTimeout(() => resetTurn(), 1000);
       }
     }

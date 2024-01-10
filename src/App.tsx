@@ -7,14 +7,12 @@ function App() {
   const [startGame, setStartGame] = useState(false);
   const [level, setLevel] = useState<number>(1);
 
-  const handleLevel = () =>
-    // level:number
-    {
-      setLevel((prevLevel) =>
-        prevLevel !== undefined && prevLevel != 3 ? prevLevel + 1 : 1
-      );
-      // console.log("New Level", level);
-    };
+  const handleLevel = () => {
+    setLevel((prevLevel) =>
+      prevLevel !== undefined && prevLevel != 3 ? prevLevel + 1 : 1
+    );
+    // console.log("New Level", level);
+  };
 
   return (
     <>
@@ -23,8 +21,6 @@ function App() {
           <div className="flex gap-10 justify-center max-lg:items-center">
             <img
               src="/title-logo.svg"
-              // width={150}
-              // height={150}
               className="w-[150px] h-[150px] max-lg:w-[90px] max-lg:h-[90px] max-sm:w-[60px] max-sm:h-[60px]"
             />
             <p className="text-9xl font-bold max-lg:text-6xl max-sm:text-4xl">
