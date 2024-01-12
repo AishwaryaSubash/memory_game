@@ -23,9 +23,12 @@ function App() {
               src="/title-logo.svg"
               className="w-[150px] h-[150px] max-lg:w-[90px] max-lg:h-[90px] max-sm:w-[60px] max-sm:h-[60px]"
             />
-            <p className="text-9xl font-bold max-lg:text-6xl max-sm:text-4xl">
-              Unmatched
-            </p>
+            <div className="flex flex-col items-center justify-center">
+              <p className="text-9xl font-bold max-lg:text-6xl max-sm:text-4xl">
+                Unmatched
+              </p>
+              <p className="text-2xl max-sm:text-base">Flip. Match. Win.</p>
+            </div>
           </div>
           <div className="flex flex-col justify-center items-center pt-5 w-11/12">
             {startGame ? (
