@@ -151,7 +151,12 @@ const Game = ({
           </div>
         </>
       ) : (
-        <div className="w-full h-full flex justify-center items-center self-center">
+        <div className="w-full h-full flex flex-col justify-center items-center self-center">
+          {level !== 1 && (
+            <p className="text-2xl">
+              Congratulations!! Moving to Level {level} ...
+            </p>
+          )}
           <img src="/loading.svg" />
         </div>
       )}
